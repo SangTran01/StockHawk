@@ -119,8 +119,6 @@ public class DetailActivity extends AppCompatActivity {
         LineData lineData = new LineData(dataSet);
         chart.setData(lineData);
 
-        //Todo try to save position after rotate
-
         chart.invalidate(); // refresh
 
         mTextView = (TextView) findViewById(R.id.text);

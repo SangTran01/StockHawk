@@ -14,11 +14,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
+
+import static android.R.attr.data;
+import static com.udacity.stockhawk.R.id.symbol;
 
 /**
  * If you are familiar with Adapter of ListView,this is the same as adapter
@@ -50,6 +54,42 @@ public class WidgetDataProvider implements RemoteViewsFactory {
 
         populateListItem();
     }
+
+    @Override
+    public void onCreate() {
+    }
+
+
+    /*
+    * Called when notifyDataSetChanged() is triggered on the remote adapter.
+    * This allows a RemoteViewsFactory
+    * to respond to data changes by updating any internal references.
+    *
+    * */
+    @Override
+    public void onDataSetChanged() {
+        Log.e("DataProvider", "onDataSetChanged called");
+        Thread thread = new Thread() {
+            public void run() {
+                clearData();
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+    }
+
+    @Override
+    public int getCount() {
+        return listItemList.size();
+    }
+
 
     public void populateListItem() {
 
@@ -88,16 +128,6 @@ public class WidgetDataProvider implements RemoteViewsFactory {
         }
     }
 
-    @Override
-    public int getCount() {
-        return listItemList.size();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
     /*
      *Similar to getView of Adapter where instead of View
      *we return RemoteViews
@@ -127,6 +157,13 @@ public class WidgetDataProvider implements RemoteViewsFactory {
                     "setBackgroundResource", R.drawable.percent_change_pill_red);
         }
 
+        Intent fillInIntent = new Intent();
+
+
+        fillInIntent.putExtra("SYMBOL", symbol);
+
+        remoteView.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+
         return remoteView;
     }
 
@@ -142,20 +179,20 @@ public class WidgetDataProvider implements RemoteViewsFactory {
     }
 
     @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
     public boolean hasStableIds() {
         return true;
     }
 
-    @Override
-    public void onCreate() {
-    }
 
-    @Override
-    public void onDataSetChanged() {
-    }
-
-    @Override
-    public void onDestroy() {
+    public void clearData() {
+        // clear the data
+        listItemList.clear();
+        populateListItem();
     }
 
 }

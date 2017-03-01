@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 
@@ -68,6 +69,7 @@ public final class QuoteSyncJob {
             }
 
             Map<String, Stock> quotes = YahooFinance.get(stockArray);
+
             Iterator<String> iterator = stockCopy.iterator();
 
             Timber.d(quotes.toString());
@@ -79,11 +81,9 @@ public final class QuoteSyncJob {
 
 
                 Stock stock = quotes.get(symbol);
-                StockQuote quote = stock.getQuote();
-
-                Log.e("SyncJob", "Quote is " + quote);
 
                 try {
+                    StockQuote quote = stock.getQuote();
                     float price = quote.getPrice().floatValue();
                     float change = quote.getChange().floatValue();
                     float percentChange = quote.getChangeInPercent().floatValue();
@@ -111,19 +111,10 @@ public final class QuoteSyncJob {
                     quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
 
                     quoteCVs.add(quoteCV);
-
                 } catch (NullPointerException e) {
-                    Timber.d("Null StockQuote Price Object.");
-                    //Symbol doesn't exist
-                    //send the message to main activity via Handler
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(context, "Invalid Stock", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    PrefUtils.removeStock(context, symbol);
+                    showToast(context, symbol);
                 }
+
             }
             context.getContentResolver()
                     .bulkInsert(
@@ -136,6 +127,19 @@ public final class QuoteSyncJob {
         } catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");
         }
+    }
+
+    public static void showToast(final Context context, String symbol) {
+        Timber.d("Null StockQuote Price Object.");
+        //Symbol doesn't exist
+        //send the message to main activity via Handler
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, R.string.toast_invalid_stock, Toast.LENGTH_LONG).show();
+            }
+        });
+        PrefUtils.removeStock(context, symbol);
     }
 
     private static void schedulePeriodic(Context context) {

@@ -26,14 +26,12 @@ public class StocksWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        //CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         // Instruct the widget manager to update the widget
 
         setRemoteAdapter(context, views);
 
-        //appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.widget_list);
         Intent clickTemplate = new Intent(context, MainActivity.class);
 
         PendingIntent pendingIntent = TaskStackBuilder.create(context)
@@ -54,7 +52,6 @@ public class StocksWidget extends AppWidgetProvider {
             Log.e("StocksWidget", "Widget IDs onUpdate calls updateAppWidget" + appWidgetId);
             updateAppWidget(context, appWidgetManager, appWidgetId);
 
-            //appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.widget_list);
         }
     }
 

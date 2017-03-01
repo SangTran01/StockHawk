@@ -36,5 +36,6 @@
     <string name="empty_string">No Stocks to display</string>
 
     <string name="fab_add_stock">"Add Stock Button."</string>
+    <string name="toast_invalid_stock">Invalid Stock</string>
 
 </resources>

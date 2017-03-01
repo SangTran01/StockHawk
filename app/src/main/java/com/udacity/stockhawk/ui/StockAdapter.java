@@ -137,8 +137,6 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
             String symbolColumn = cursor.getString(symbolColumnIdx);
             clickHandler.onClick(symbolColumn);
 
-
-            Log.e("ADAPTER", "WHAT is symbol column? " + symbolColumn);
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("Symbol", symbolColumn);
             context.startActivity(intent);

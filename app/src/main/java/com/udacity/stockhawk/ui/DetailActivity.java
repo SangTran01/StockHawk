@@ -73,9 +73,6 @@ public class DetailActivity extends AppCompatActivity {
         } finally {
             c.close();
         }
-        //he create 2 arrays,
-        //1 for xaxis
-        //and yaxis
 
         ArrayList<String> xAxes = new ArrayList<>();
         ArrayList<Float> yValuesList = new ArrayList<Float>();
@@ -83,10 +80,7 @@ public class DetailActivity extends AppCompatActivity {
 
         for (String keyValue : mHistory.split(" *\n *")) {
             String[] pairs = keyValue.split(" *, *", 2);
-            //map.put(pairs[0], pairs.length == 1 ? "" : pairs[1]);
-            // turn your data into Entry objects
 
-            //DIVIDE by 1000 these numbers are too large to be used as floats
             xAxes.add(pairs[0]);
             yValuesList.add(Float.parseFloat(pairs.length == 1 ? "" : pairs[1]));
         }
@@ -96,10 +90,6 @@ public class DetailActivity extends AppCompatActivity {
         //sort Date labels
         Collections.sort(xAxes);
         final String[] labels = xAxes.toArray(new String[0]);
-
-        //Test values
-//        float[] valuesX = {1487048400, 1487221200, 1487221200};
-//        float[] valuesY = {(float) 135.72, (float) 132.12, (float) 129.08};
 
         // in this example, a LineChart is initialized from xml
         final LineChart chart = (LineChart) findViewById(R.id.chart);
@@ -138,10 +128,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        //Setup markerview
-//        CustomMarkerView mv = new CustomMarkerView(this, R.layout.custom_marker_view_layout);
-//        chart.setMarker(mv);
-
 
         IAxisValueFormatter formatter = new IAxisValueFormatter() {
             @Override
@@ -150,7 +136,6 @@ public class DetailActivity extends AppCompatActivity {
                 Date date = new Date(Long.valueOf(dateInMilli));
                 SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
                 String dateText = df2.format(date);
-                //Log.e(LOG_TAG, "Date " + dateText);
                 return dateText;
             }
         };

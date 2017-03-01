@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     void addStock(String symbol) {
-        if (symbol != null && !symbol.isEmpty()) {
+        if (symbol != null && !symbol.isEmpty() && !symbol.contains(".")) {
 
             if (networkUp()) {
                 swipeRefreshLayout.setRefreshing(true);
